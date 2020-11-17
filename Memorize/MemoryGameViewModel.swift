@@ -14,9 +14,12 @@ class MemoryGameViewModel: ObservableObject {
     @Published var showingMenu = true
     
     private static func createEmojiMemoryGame(sizeClass: UserInterfaceSizeClass, difficulty: Difficulty) -> MemoryGame<String> {
-        let emojis: Array<String> = ["🌈","🧚‍♀️", "🦋","🧞‍♀️","👑","💍","🔮","🏺","📿","🕍","🕌","🏵"]
+        let number = Int.random(in: 0...2)
+        let emojis: Array<Array<String>> = [["🌕","🌖","🌗","🌘","🌑","🌒","🌓","🌔","🌚","🌜","🌛"],
+                                            ["🔮","🧿","🌙","🍄","🌶","💎","🖤","🧙‍♀️","🧝‍♀️","🌿","🕯","✨"],["🐌","🐛","🦗","🦎","🐢","🦂","🦟","🕷","🦐","🦀","🐀","🦔"]]
+
         return MemoryGame<String>(numberOfPairsOfCards: numbOfPairs(sizeClass: sizeClass, difficulty: difficulty)) { pairIndex in
-            return emojis[pairIndex]
+            return emojis[number][pairIndex]
         }
     }
     
