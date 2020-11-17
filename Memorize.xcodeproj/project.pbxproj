@@ -21,6 +21,7 @@
 		50976D4A2550980300221EDF /* GridLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50976D492550980300221EDF /* GridLayout.swift */; };
 		50976D4C25509BD700221EDF /* Array+Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50976D4B25509BD700221EDF /* Array+Identifiable.swift */; };
 		50976D4E2550ACD100221EDF /* Array+Only.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50976D4D2550ACD100221EDF /* Array+Only.swift */; };
+		50C181722562E5660059152B /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C181712562E5660059152B /* MenuView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		50976D492550980300221EDF /* GridLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridLayout.swift; sourceTree = "<group>"; };
 		50976D4B25509BD700221EDF /* Array+Identifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Identifiable.swift"; sourceTree = "<group>"; };
 		50976D4D2550ACD100221EDF /* Array+Only.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Only.swift"; sourceTree = "<group>"; };
+		50C181712562E5660059152B /* MenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,6 +75,7 @@
 			isa = PBXGroup;
 			children = (
 				50694E35254B2F3600DDA3B1 /* EmojiMemoryGameView.swift */,
+				50C181712562E5660059152B /* MenuView.swift */,
 				5023863F2561CAC00049B9C3 /* Cardify.swift */,
 				5023863D2561C4050049B9C3 /* Pie.swift */,
 				50976D4525501BB500221EDF /* EmojiMemoryGame.swift */,
@@ -171,6 +174,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				502386402561CAC00049B9C3 /* Cardify.swift in Sources */,
+				50C181722562E5660059152B /* MenuView.swift in Sources */,
 				5023863E2561C4060049B9C3 /* Pie.swift in Sources */,
 				50694E32254B2F3600DDA3B1 /* AppDelegate.swift in Sources */,
 				50694E34254B2F3600DDA3B1 /* SceneDelegate.swift in Sources */,

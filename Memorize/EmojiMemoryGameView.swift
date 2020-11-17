@@ -10,18 +10,38 @@ import SwiftUI
 
 struct EmojiMemoryGameView: View {
     @ObservedObject var viewModel: EmojiMemoryGame
+    @State var showingMenu = true
+
 
     var body: some View {
-        Grid(viewModel.cards) { card in
-            CardView(card: card).onTapGesture {
-                self.viewModel.choose(card: card)
+        VStack {
+            Button(action: {self.viewModel.resetGame()}){
+                Text("Reset")
             }
-                .padding(5)
-        }
+            Button(action: {
+                self.showingMenu.toggle()
+            }) {
+                Text("New Game")
+            }.sheet(isPresented: $showingMenu) {
+                MenuView()
+            }
+            Grid(viewModel.cards) { card in
+                CardView(card: card).onTapGesture {
+                    self.viewModel.choose(card: card)
+                }
+                    .padding(5)
+            }
 
-            .padding()
-            .foregroundColor(Color.blue)
+                .padding()
+                .foregroundColor(Color.blue)
+        }
+        
+
     }
+    
+
+    
+    
 }
 
 struct CardView: View {
@@ -47,6 +67,8 @@ struct CardView: View {
 
         }
     }
+    
+    
 
 
     //MARK: - Drawing Constants

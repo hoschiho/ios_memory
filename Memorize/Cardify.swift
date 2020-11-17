@@ -20,7 +20,7 @@ struct Cardify: ViewModifier{
             } else {
                     RoundedRectangle(cornerRadius: cornerRadius).fill()
                 }
-            }.aspectRatio(3/2, contentMode: .fit)
+            }
             
         }
 
