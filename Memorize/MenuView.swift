@@ -9,6 +9,8 @@
 import SwiftUI
 
 struct MenuView: View {
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+
     @ObservedObject var viewModel: MemoryGameViewModel
 
     @State private var selectedGameType = MemoryGameType.EmojiMemoryGame
@@ -21,9 +23,11 @@ struct MenuView: View {
             }
             Picker(selection: $selectedDifficulty, label: Text("Difficulty")) {
                 Text("Easy").tag(Difficulty.Easy)
+                Text("Medium").tag(Difficulty.Medium)
+                Text("Hard").tag(Difficulty.Hard)
             }
             Button(action: {
-                viewModel.startGame(type: selectedGameType, difficulty: selectedDifficulty)
+                self.viewModel.startGame(sizeClass: self.horizontalSizeClass ?? UserInterfaceSizeClass.regular, type: self.selectedGameType, difficulty: self.selectedDifficulty)
             }) {
                 Text("Start Game")
             }
@@ -48,6 +52,6 @@ struct MenuView: View {
 struct MenuView_Previews: PreviewProvider {
     static var previews: some View {
         let game = MemoryGameViewModel()
-        MenuView(viewModel: game)
+        return MenuView(viewModel: game)
     }
 }

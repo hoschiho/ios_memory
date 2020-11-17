@@ -14,11 +14,11 @@ struct MemoryGameView: View {
     var body: some View {
         VStack {
             Button(action: {
-                viewModel.showingMenu = true
+                self.viewModel.showingMenu = true
             }) {
                 Text("New Game")
             }.sheet(isPresented: $viewModel.showingMenu) {
-                MenuView(viewModel: viewModel)
+                MenuView(viewModel: self.viewModel)
             }
             Grid(viewModel.cards) { card in
                 CardView(card: card).onTapGesture {

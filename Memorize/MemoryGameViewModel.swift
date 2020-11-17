@@ -9,27 +9,48 @@
 import SwiftUI
 
 class MemoryGameViewModel: ObservableObject {
-    @Environment(\.horizontalSizeClass) static var horizontalSizeClass
-    @Published private var model: MemoryGame<String> = MemoryGameViewModel.createEmojiMemoryGame(difficulty: Difficulty.Easy)
+    @Published private var model: MemoryGame<String> = MemoryGameViewModel.createEmojiMemoryGame(sizeClass: UserInterfaceSizeClass.regular, difficulty: Difficulty.Easy)
         
     @Published var showingMenu = true
     
-    private static func createEmojiMemoryGame(difficulty: Difficulty) -> MemoryGame<String> {
-        let emojis: Array<String> = ["🌈","🧚‍♀️", "🦋","🧞‍♀️","👑"]
-        return MemoryGame<String>(numberOfPairsOfCards: numbOfPairs(difficulty: difficulty)) { pairIndex in
+    private static func createEmojiMemoryGame(sizeClass: UserInterfaceSizeClass, difficulty: Difficulty) -> MemoryGame<String> {
+        let emojis: Array<String> = ["🌈","🧚‍♀️", "🦋","🧞‍♀️","👑","💍","🔮","🏺","📿","🕍","🕌","🏵"]
+        return MemoryGame<String>(numberOfPairsOfCards: numbOfPairs(sizeClass: sizeClass, difficulty: difficulty)) { pairIndex in
             return emojis[pairIndex]
         }
     }
     
-    static func numbOfPairs(difficulty: Difficulty) -> Int {
-        if horizontalSizeClass == .compact {
-            NSLog("compact")
-            return 2
-        } else {
-            NSLog("gross")
+    static func numbOfPairs(sizeClass: UserInterfaceSizeClass, difficulty: Difficulty) -> Int {
+        
+        switch difficulty {
+        case .Easy:
+                if sizeClass == UserInterfaceSizeClass.compact {
+                    NSLog("compact")
+                    return 2
+                } else {
+                    NSLog("gross")
+                    return 4
+                }
+            
+        case .Medium:
+                if sizeClass == UserInterfaceSizeClass.compact {
+                    NSLog("compact")
+                    return 6
+                } else {
+                    NSLog("gross")
+                    return 10
+                }
+            
+        case .Hard:
+                if sizeClass == UserInterfaceSizeClass.compact {
+                    NSLog("compact")
+                    return 8
+                } else {
+                    NSLog("gross")
+                    return 12
+                }
+            }
 
-            return 5
-        }
     }
         
     // MARK: - Access to the Model
@@ -38,12 +59,12 @@ class MemoryGameViewModel: ObservableObject {
     }
     
     // MARK: - Intent(s)
-    func startGame(type: MemoryGameType, difficulty: Difficulty) {
+    func startGame(sizeClass: UserInterfaceSizeClass, type: MemoryGameType, difficulty: Difficulty) {
         self.showingMenu = false
 
         switch type {
             case MemoryGameType.EmojiMemoryGame:
-                model = MemoryGameViewModel.createEmojiMemoryGame(difficulty: difficulty)
+                model = MemoryGameViewModel.createEmojiMemoryGame(sizeClass: sizeClass, difficulty: difficulty)
                 break
         }
     }
@@ -53,9 +74,6 @@ class MemoryGameViewModel: ObservableObject {
         model.choose(card: card)
     }
     
-    func resetGame() {
-        model = MemoryGameViewModel.createEmojiMemoryGame(difficulty: Difficulty.Easy)
-    }
 }
 
 public enum MemoryGameType {
@@ -64,4 +82,6 @@ public enum MemoryGameType {
 
 public enum Difficulty {
     case Easy
+    case Medium
+    case Hard
 }
