@@ -8,22 +8,17 @@
 
 import SwiftUI
 
-struct EmojiMemoryGameView: View {
-    @ObservedObject var viewModel: EmojiMemoryGame
-    @State var showingMenu = true
-
+struct MemoryGameView: View {
+    @ObservedObject var viewModel: MemoryGameViewModel
 
     var body: some View {
         VStack {
-            Button(action: {self.viewModel.resetGame()}){
-                Text("Reset")
-            }
             Button(action: {
-                self.showingMenu.toggle()
+                viewModel.showingMenu = true
             }) {
                 Text("New Game")
-            }.sheet(isPresented: $showingMenu) {
-                MenuView()
+            }.sheet(isPresented: $viewModel.showingMenu) {
+                MenuView(viewModel: viewModel)
             }
             Grid(viewModel.cards) { card in
                 CardView(card: card).onTapGesture {
@@ -99,8 +94,8 @@ struct CardView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        let game = EmojiMemoryGame()
+        let game = MemoryGameViewModel()
         game.choose(card: game.cards[0])
-        return EmojiMemoryGameView(viewModel: game)
+        return MemoryGameView(viewModel: game)
     }
 }

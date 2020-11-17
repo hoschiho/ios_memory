@@ -9,22 +9,24 @@
 import SwiftUI
 
 struct MenuView: View {
-    let view = EmojiMemoryGameView(viewModel: EmojiMemoryGame())
+    @ObservedObject var viewModel: MemoryGameViewModel
 
+    @State private var selectedGameType = MemoryGameType.EmojiMemoryGame
+    @State private var selectedDifficulty = Difficulty.Easy
+    
     var body: some View {
         VStack {
-            Picker(selection: /*@START_MENU_TOKEN@*/.constant(1)/*@END_MENU_TOKEN@*/, label: Text("GameType")) {
-                Text("Emoji").tag(1)
-                Text("Contacts").tag(2)
-                Text("Images").tag(3)
+            Picker(selection: $selectedGameType, label: Text("GameType")) {
+                Text("Emoji").tag(MemoryGameType.EmojiMemoryGame)
             }
-            Picker(selection: /*@START_MENU_TOKEN@*/.constant(1)/*@END_MENU_TOKEN@*/, label: Text("Difficulty")) {
-                Text("Easy").tag(1)
-                Text("Medium").tag(2)
-                Text("Hard").tag(3)
-            
-            
-        }
+            Picker(selection: $selectedDifficulty, label: Text("Difficulty")) {
+                Text("Easy").tag(Difficulty.Easy)
+            }
+            Button(action: {
+                viewModel.startGame(type: selectedGameType, difficulty: selectedDifficulty)
+            }) {
+                Text("Start Game")
+            }
 
         }
 
@@ -45,6 +47,7 @@ struct MenuView: View {
 
 struct MenuView_Previews: PreviewProvider {
     static var previews: some View {
-        MenuView()
+        let game = MemoryGameViewModel()
+        MenuView(viewModel: game)
     }
 }
