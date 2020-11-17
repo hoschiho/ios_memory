@@ -20,6 +20,7 @@ struct MemoryGameView: View {
             }.sheet(isPresented: $viewModel.showingMenu) {
                 MenuView(viewModel: self.viewModel)
             }
+            Text("Score:  \(viewModel.score)")
             Grid(viewModel.cards) { card in
                 CardView(card: card).onTapGesture {
                     self.viewModel.choose(card: card)

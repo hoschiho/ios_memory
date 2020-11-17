@@ -28,28 +28,22 @@ class MemoryGameViewModel: ObservableObject {
         switch difficulty {
         case .Easy:
                 if sizeClass == UserInterfaceSizeClass.compact {
-                    NSLog("compact")
                     return 2
                 } else {
-                    NSLog("gross")
                     return 4
                 }
             
         case .Medium:
                 if sizeClass == UserInterfaceSizeClass.compact {
-                    NSLog("compact")
                     return 6
                 } else {
-                    NSLog("gross")
                     return 10
                 }
             
         case .Hard:
                 if sizeClass == UserInterfaceSizeClass.compact {
-                    NSLog("compact")
                     return 8
                 } else {
-                    NSLog("gross")
                     return 12
                 }
             }
@@ -59,6 +53,10 @@ class MemoryGameViewModel: ObservableObject {
     // MARK: - Access to the Model
     var cards: Array<MemoryGame<String>.Card> {
         return model.cards
+    }
+    
+    var score: Int {
+        return model.score
     }
     
     // MARK: - Intent(s)

@@ -9,7 +9,12 @@
 import Foundation
 
 struct MemoryGame<CardContent> where CardContent: Equatable {
+    
     private(set) var cards: Array<Card>
+    let defaults = UserDefaults.standard
+    var score = 0
+    lazy var cardsInGame = cards.count
+
     
     private var indexOfTheOneAndOnlyFaceUpCard: Int? {
         get { cards.indices.filter { cards[$0].isFaceUp }.only }
@@ -20,19 +25,51 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
         }
     }
     
+
+    
     mutating func choose(card: Card) {
         if let chosenIndex = cards.firstIndex(matching: card), !cards[chosenIndex].isFaceUp, !cards[chosenIndex].isMatched {
+            
             if let potentialMatchingIndex = indexOfTheOneAndOnlyFaceUpCard {
                 if cards[chosenIndex].content == cards[potentialMatchingIndex].content {
                     cards[chosenIndex].isMatched = true
                     cards[potentialMatchingIndex].isMatched = true
+                    cardsInGame -= 2
+                    score += 2
+                    if cardsInGame == 0 && score >= defaults.integer(forKey: "HighScore"){
+                        NSLog("New HighScore")
+                        defaults.set(score, forKey: "HighScore")
+                    }
+                }else {
+                    cards[chosenIndex].FaceUpCount += 1
+                    cards[potentialMatchingIndex].FaceUpCount += 1
+
+                    if cards[chosenIndex].FaceUpCount > 1 {
+                        score -= 1
+                    }
+                    
+                    if cards[potentialMatchingIndex].FaceUpCount > 1 {
+                        score -= 1
+                    }
+
+
                 }
                 self.cards[chosenIndex].isFaceUp = true
             } else {
                 indexOfTheOneAndOnlyFaceUpCard = chosenIndex
+
+                    
+
+                }
+
+                
+                
+                
             }
+            
+            
         }
-    }
+    
     
 
     init(numberOfPairsOfCards: Int, cardContentFactory: (Int) -> CardContent) {
@@ -49,6 +86,8 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
     struct Card: Identifiable {
         var isFaceUp: Bool = false
         var isMatched: Bool = false
+        var alreadySeen: Bool = false
+        var FaceUpCount: Int = 0
         var content: CardContent
         var id: Int
     }
