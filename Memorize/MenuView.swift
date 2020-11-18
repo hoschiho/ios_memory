@@ -31,7 +31,10 @@ struct MenuView: View {
                 Text("Hard").tag(Difficulty.Hard)
             }
             Button(action: {
-                self.viewModel.startGame(sizeClass: self.horizontalSizeClass ?? UserInterfaceSizeClass.regular, type: self.selectedGameType, difficulty: self.selectedDifficulty)
+                withAnimation(.easeInOut(duration: 1)){
+                    self.viewModel.startGame(sizeClass: self.horizontalSizeClass ?? UserInterfaceSizeClass.regular, type: self.selectedGameType, difficulty: self.selectedDifficulty)
+
+                }
             }) {
                 Text("Start Game")
             }
