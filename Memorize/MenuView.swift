@@ -16,11 +16,11 @@ struct MenuView: View {
     @State private var selectedGameType = MemoryGameType.EmojiMemoryGame
     @State private var selectedDifficulty = Difficulty.Easy
     
-    let score = UserDefaults.standard.integer(forKey: "HighScore")
+    let HighScore = UserDefaults.standard.integer(forKey: "HighScore")
     
     var body: some View {
         VStack {
-            Text("HighScore: \(score)")
+            Text("HighScore: \(HighScore)")
 
             Picker(selection: $selectedGameType, label: Text("GameType")) {
                 Text("Emoji").tag(MemoryGameType.EmojiMemoryGame)

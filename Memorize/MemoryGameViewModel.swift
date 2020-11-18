@@ -59,6 +59,14 @@ class MemoryGameViewModel: ObservableObject {
         return model.score
     }
     
+    var cardsInGame: Int {
+        return model.cardsInGame
+    }
+    
+    var won: Bool {
+        return model.won
+    }
+    
     // MARK: - Intent(s)
     func startGame(sizeClass: UserInterfaceSizeClass, type: MemoryGameType, difficulty: Difficulty) {
         self.showingMenu = false

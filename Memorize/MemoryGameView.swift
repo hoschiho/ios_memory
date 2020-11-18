@@ -11,6 +11,7 @@ import SwiftUI
 struct MemoryGameView: View {
     @ObservedObject var viewModel: MemoryGameViewModel
 
+
     var body: some View {
         VStack {
             Button(action: {
@@ -21,6 +22,15 @@ struct MemoryGameView: View {
                 MenuView(viewModel: self.viewModel)
             }
             Text("Score:  \(viewModel.score)")
+
+            if viewModel.won == true {
+                Text("Du bisch en chline gwünno")
+            }
+            if viewModel.score > UserDefaults.standard.integer(forKey: "HighScore"){
+                Text("!!!NEW HIGHSCORE!!!")
+            }
+            
+            
             Grid(viewModel.cards) { card in
                 CardView(card: card).onTapGesture {
                     self.viewModel.choose(card: card)

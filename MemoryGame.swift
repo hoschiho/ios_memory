@@ -13,6 +13,7 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
     private(set) var cards: Array<Card>
     let defaults = UserDefaults.standard
     var score = 0
+    var won = false
     lazy var cardsInGame = cards.count
 
     
@@ -36,10 +37,11 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
                     cards[potentialMatchingIndex].isMatched = true
                     cardsInGame -= 2
                     score += 2
-                    if cardsInGame == 0 && score >= defaults.integer(forKey: "HighScore"){
+                    if score > defaults.integer(forKey: "HighScore"){
                         NSLog("New HighScore")
                         defaults.set(score, forKey: "HighScore")
                     }
+                    if cardsInGame == 0 {won = true}
                 }else {
                     cards[chosenIndex].FaceUpCount += 1
                     cards[potentialMatchingIndex].FaceUpCount += 1
