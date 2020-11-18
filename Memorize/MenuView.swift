@@ -8,16 +8,18 @@
 
 import SwiftUI
 
-struct MenuView: View {
+struct MenuView: View, SizeClassAdjustable {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    @Environment(\.verticalSizeClass) var verticalSizeClass
+
 
     @ObservedObject var viewModel: MemoryGameViewModel
 
     @State private var selectedGameType = MemoryGameType.EmojiMemoryGame
     @State private var selectedDifficulty = Difficulty.Easy
-    
+
     let HighScore = UserDefaults.standard.integer(forKey: "HighScore")
-    
+
     var body: some View {
         VStack {
             Text("HighScore: \(HighScore)")
@@ -31,8 +33,8 @@ struct MenuView: View {
                 Text("Hard").tag(Difficulty.Hard)
             }
             Button(action: {
-                withAnimation(.easeInOut(duration: 1)){
-                    self.viewModel.startGame(sizeClass: self.horizontalSizeClass ?? UserInterfaceSizeClass.regular, type: self.selectedGameType, difficulty: self.selectedDifficulty)
+                withAnimation(.easeInOut(duration: 1)) {
+                    self.viewModel.startGame(isPad: self.isPad, type: self.selectedGameType, difficulty: self.selectedDifficulty)
 
                 }
             }) {
@@ -49,7 +51,16 @@ struct MenuView: View {
 
 
 
+protocol SizeClassAdjustable {
+    var verticalSizeClass: UserInterfaceSizeClass? { get }
+    var horizontalSizeClass: UserInterfaceSizeClass? { get }
+}
+extension SizeClassAdjustable {
+    var isPad: Bool {
+        return horizontalSizeClass == .regular && verticalSizeClass == .regular
 
+    }
+}
 
 
 

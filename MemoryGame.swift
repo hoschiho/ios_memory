@@ -9,28 +9,28 @@
 import Foundation
 
 struct MemoryGame<CardContent> where CardContent: Equatable {
-    
+
     private(set) var cards: Array<Card>
     let defaults = UserDefaults.standard
     var score = 0
     var won = false
     lazy var cardsInGame = cards.count
 
-    
+
     private var indexOfTheOneAndOnlyFaceUpCard: Int? {
         get { cards.indices.filter { cards[$0].isFaceUp }.only }
         set {
             for index in cards.indices {
-                    cards[index].isFaceUp = index == newValue
+                cards[index].isFaceUp = index == newValue
             }
         }
     }
-    
 
-    
+
+
     mutating func choose(card: Card) {
         if let chosenIndex = cards.firstIndex(matching: card), !cards[chosenIndex].isFaceUp, !cards[chosenIndex].isMatched {
-            
+
             if let potentialMatchingIndex = indexOfTheOneAndOnlyFaceUpCard {
                 if cards[chosenIndex].content == cards[potentialMatchingIndex].content {
                     cards[chosenIndex].isMatched = true
@@ -43,19 +43,19 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
                     if cards[potentialMatchingIndex].hasEarnedBonus {
                         score += 1
                     }
-                    if score > defaults.integer(forKey: "HighScore"){
+                    if score > defaults.integer(forKey: "HighScore") {
                         NSLog("New HighScore")
                         defaults.set(score, forKey: "HighScore")
                     }
-                    if cardsInGame == 0 {won = true}
-                }else {
+                    if cardsInGame == 0 { won = true }
+                } else {
                     cards[chosenIndex].FaceUpCount += 1
                     cards[potentialMatchingIndex].FaceUpCount += 1
 
                     if cards[chosenIndex].FaceUpCount > 1 {
                         score -= 1
                     }
-                    
+
                     if cards[potentialMatchingIndex].FaceUpCount > 1 {
                         score -= 1
                     }
@@ -66,33 +66,33 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
             } else {
                 indexOfTheOneAndOnlyFaceUpCard = chosenIndex
 
-                    
 
-                }
 
-                
-                
-                
             }
-            
-            
+
+
+
+
         }
-    
-    
+
+
+    }
+
+
 
     init(numberOfPairsOfCards: Int, cardContentFactory: (Int) -> CardContent) {
         cards = Array<Card>()
         for pairIndex in 0..<numberOfPairsOfCards {
             let content = cardContentFactory(pairIndex)
-            cards.append(Card(content: content, id: pairIndex*2))
-            cards.append(Card(content: content, id: pairIndex*2+1))
+            cards.append(Card(content: content, id: pairIndex * 2))
+            cards.append(Card(content: content, id: pairIndex * 2 + 1))
             cards.shuffle()
 
         }
     }
-    
+
     struct Card: Identifiable {
-        var isFaceUp: Bool = false{
+        var isFaceUp: Bool = false {
             didSet {
                 if isFaceUp {
                     startUsingBonusTime()
@@ -114,12 +114,12 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
 
 
 
- // MARK: - Bonus Time
+        // MARK: - Bonus Time
         /// It gives bonus points if user matches the card before a certain amount of time during which the card is face up
-        
+
         // can be zero which means "no bonus available" for this card
         var bonusTimeLimit: TimeInterval = 6
-        
+
         // how long this card has even been face up
         private var faceUpTime: TimeInterval {
             if let lastFaceUpDate = self.lastFaceUpDate {
@@ -128,46 +128,46 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
                 return pastFaceUpTime
             }
         }
-        
+
         // the last time this card was turned up (and is still face up)
         var lastFaceUpDate: Date?
-        
+
         // the accumulated time this card has been face up in the past
         /// not incuding the current time it's been face up if it is currently so
         var pastFaceUpTime: TimeInterval = 0
-        
+
         // how much time left before the bonus opportunity runs out
         var bonusTimeRemaining: TimeInterval {
             max(0, bonusTimeLimit - faceUpTime)
         }
-        
+
         // % of the bonus time remaining
         var bonusRemaining: Double {
             (bonusTimeLimit > 0 && bonusTimeRemaining > 0) ? bonusTimeRemaining / bonusTimeLimit : 0
         }
-        
+
         // whether the card was matched during the bonus time period
         var hasEarnedBonus: Bool {
             isMatched && bonusTimeRemaining > 0
         }
-        
+
         // whether we are currently face up, unmatched and have not yet used up the bonus window
         var isConsumingBonusTime: Bool {
             isFaceUp && !isMatched && bonusTimeRemaining > 0
         }
-        
+
         // called when the card transitions to face up state
         private mutating func startUsingBonusTime() {
             if isConsumingBonusTime, lastFaceUpDate == nil {
                 lastFaceUpDate = Date()
             }
         }
-        
+
         // called when the card goes back face down (or gets matched)
         private mutating func stopUsingBonusTime() {
             pastFaceUpTime = faceUpTime
             lastFaceUpDate = nil
         }
- 
+
     }
 }

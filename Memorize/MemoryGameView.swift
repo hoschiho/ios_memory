@@ -66,7 +66,7 @@ struct CardView: View {
 
     private func startBonusTimeAnimation() {
         animatedBonusRemaining = card.bonusRemaining
-        withAnimation(.linear(duration: card.bonusTimeRemaining )) {
+        withAnimation(.linear(duration: card.bonusTimeRemaining)) {
             animatedBonusRemaining = 0
         }
     }
