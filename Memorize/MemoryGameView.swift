@@ -90,8 +90,8 @@ struct CardView: View {
                     .padding(5).opacity(0.4)
                 Text(card.content)
                     .font(Font.system(size: fontSize(for: size)))
-                    .rotationEffect(Angle.degrees(card.isMatched ? 360 : 0))
-                    .animation(card.isMatched ? Animation.linear.repeatForever(autoreverses: false) : .default)
+                    .rotationEffect(Angle.degrees(card.isMatched ? 10 : 0))
+                    .animation(card.isMatched ? Animation.linear.repeatForever(autoreverses: true) : .default)
             }
                 .cardify(isFaceUp: card.isFaceUp)
                 .transition(AnyTransition.scale)
