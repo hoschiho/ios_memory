@@ -90,6 +90,10 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
 
         }
     }
+    
+    init() {
+        cards = Array<Card>()
+    }
 
     struct Card: Identifiable {
         var isFaceUp: Bool = false {

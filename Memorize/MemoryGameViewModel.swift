@@ -7,9 +7,12 @@
 //
 
 import SwiftUI
+import Combine
+
 
 class MemoryGameViewModel: ObservableObject {
-    @Published private var model: MemoryGame<String> = MemoryGameViewModel.createEmojiMemoryGame(isPad: false, difficulty: Difficulty.Easy)
+    @Published private var model: MemoryGame<String> = MemoryGame()
+
 
     @Published var showingMenu = true
 
@@ -21,6 +24,33 @@ class MemoryGameViewModel: ObservableObject {
         return MemoryGame<String>(numberOfPairsOfCards: numbOfPairs(isPad: isPad, difficulty: difficulty)) { pairIndex in
             return emojis[number][pairIndex]
         }
+    }
+    private func createUnsplashMemoryGame(isPad: Bool, difficulty: Difficulty) {
+        let request = URL(string: "https://api.unsplash.com/photos/random/?client_id=P2j7aN1Y40nlIrLjbQm_EezeBZRZjBfAgNijHFle1Kk&count=12")!
+
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                fatalError("Error: \(error.localizedDescription)")
+            }
+            guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
+                fatalError("Error: invalid HTTP response code")
+            }
+            guard let data = data else {
+                fatalError("Error: missing response data")
+            }
+
+            do {
+                let decoder = JSONDecoder()
+                let results = try decoder.decode([UnsplashImage].self, from: data)
+                self.model = MemoryGame<String>(numberOfPairsOfCards: MemoryGameViewModel.numbOfPairs(isPad: isPad, difficulty: difficulty)) { pairIndex in
+                return results[pairIndex].urls.thumb}
+                print(results.map { $0.id })
+            }
+            catch {
+                print("Error: \(error.localizedDescription)")
+            }
+        }
+        task.resume()
     }
 
     static func numbOfPairs(isPad: Bool, difficulty: Difficulty) -> Int {
@@ -74,6 +104,8 @@ class MemoryGameViewModel: ObservableObject {
         switch type {
         case MemoryGameType.EmojiMemoryGame:
             model = MemoryGameViewModel.createEmojiMemoryGame(isPad: isPad, difficulty: difficulty)
+        case MemoryGameType.UnsplashMemoryGame:
+            createUnsplashMemoryGame(isPad: isPad, difficulty: difficulty)
             break
         }
     }
@@ -87,6 +119,7 @@ class MemoryGameViewModel: ObservableObject {
 
 public enum MemoryGameType {
     case EmojiMemoryGame
+    case UnsplashMemoryGame
 }
 
 public enum Difficulty {

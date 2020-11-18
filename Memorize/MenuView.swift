@@ -26,6 +26,8 @@ struct MenuView: View, SizeClassAdjustable {
 
             Picker(selection: $selectedGameType, label: Text("GameType")) {
                 Text("Emoji").tag(MemoryGameType.EmojiMemoryGame)
+                Text("Bilder").tag(MemoryGameType.UnsplashMemoryGame)
+
             }
             Picker(selection: $selectedDifficulty, label: Text("Difficulty")) {
                 Text("Easy").tag(Difficulty.Easy)

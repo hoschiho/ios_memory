@@ -76,7 +76,6 @@ struct CardView: View {
         if card.isFaceUp || !card.isMatched {
             ZStack {
                 Group {
-
                     if card.isConsumingBonusTime {
                         Pie(startAngle: Angle.degrees(0 - 90), endAngle: Angle.degrees(-animatedBonusRemaining * 360 - 90), clockwise: true)
                             .onAppear {
@@ -88,10 +87,19 @@ struct CardView: View {
                     }
                 }
                     .padding(5).opacity(0.4)
+                
+                if card.content.starts(with: "http")    {
+                    AsyncImage(
+                        url: URL(string: card.content)!
+                    ).aspectRatio(contentMode: .fit)
+                } else {
+                                        
+                
                 Text(card.content)
                     .font(Font.system(size: fontSize(for: size)))
                     .rotationEffect(Angle.degrees(card.isMatched ? 10 : 0))
                     .animation(card.isMatched ? Animation.linear.repeatForever(autoreverses: true) : .default)
+                }
             }
                 .cardify(isFaceUp: card.isFaceUp)
                 .transition(AnyTransition.scale)
